@@ -1,59 +1,48 @@
-// tracks current number of to-do list items
-let listCounter = 0;
-
-const form = document.querySelector('.form');
-form.addEventListener('submit', (e) => {
+const listContainer = document.querySelector('.listContainer');
+document.querySelector('.form').addEventListener('submit', (e) => {
     e.preventDefault();
-    listFunc();
+    addTask();
 });
 
-const listFunc = () => {
-    listCounter++;
-    const listContainer = document.querySelector('.listContainer');
+const addTask = () => {
     const inputBox = document.querySelector('.inputBox');
-    const divElement = document.createElement('div');
+    const taskDiv = document.createElement('div');
     const inputTextSpan = document.createElement('span');
     inputTextSpan.textContent = inputBox.value;
-    const checkbox = addCheckbox(inputTextSpan);
-    const deleteBtn = deleteItem(divElement, checkbox);
+    const checkbox = createCheckbox(inputTextSpan);
+    const deleteBtn = createDeleteButton(taskDiv, checkbox);
     
-    promptChange();
-    divElement.append(checkbox, inputTextSpan, deleteBtn);
-    listContainer.append(divElement);
+    taskDiv.append(checkbox, inputTextSpan, deleteBtn);
+    listContainer.append(taskDiv);
     inputBox.value = '';
+    changePrompt();
 };
 
-const deleteItem = (divElement, checkbox) => {
+const createDeleteButton = (divElement, checkbox) => {
     const deleteBtn = document.createElement('button');
     deleteBtn.classList.add('divButton');
     deleteBtn.textContent = 'Remove';
     deleteBtn.addEventListener('click', () => {
         if (checkbox.checked) {
             divElement.remove();
-            listCounter--;
-            promptChange();
+            changePrompt();
         } 
     });
     return deleteBtn;
 };
 
-const addCheckbox = (inputTextSpan) => {
+const createCheckbox = (inputTextSpan) => {
     const checkbox = document.createElement('input');
     checkbox.setAttribute('type', 'checkbox');
     checkbox.addEventListener('change', () => {
-        if (inputTextSpan.classList.contains('linethrough')) {
-            inputTextSpan.classList.remove('linethrough');
-            
-        } else {
-            inputTextSpan.classList.add('linethrough');
-        }
+        inputTextSpan.classList.toggle('linethrough');
     });
     return checkbox;
 };
 
-const promptChange = () => {
+const changePrompt = () => {
     const prompt = document.querySelector('.prompt');
-    if (listCounter >= 1) {
+    if (listContainer.children.length > 0) {
         prompt.textContent = 'Awesome!! What else?';
     } else {
         prompt.textContent = 'What do you want to do today?';
