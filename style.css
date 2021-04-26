@@ -51,7 +51,7 @@ body {
     display: block;
 }
 
-.linethrough {
+.lineThrough {
     text-decoration: line-through;
     text-decoration-color: red;
     text-decoration-thickness: 3px;
